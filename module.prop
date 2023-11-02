@@ -1,7 +1,4 @@
 id=systemless-gapps
 name=Systemless Gapps
-version=v1.2
-versionCode=3
 author=Howard
 description=Install Gapps systemlessly
-updateJson=https://github.com/Kr328/Riru-IFWEnhance/releases/latest/download/update.json

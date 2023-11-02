@@ -19,11 +19,20 @@ if [ "$API" != "$GAPPS_VERSION" ]; then
     abort "This package is for Android $gapps_version_nice (SDK $GAPPS_VERSION) but your system is Android $android_version_nice (SDK $API)! Aborting"
 fi
 ui_print "Extract MindTheGapps"
-if ! unzip "$GAPPS_PATH" "system/*" -x "system/addon.d/*" "system/product/priv-app/VelvetTitan/*" "system/system_ext/priv-app/SetupWizard/*" -d "$MODPATH"; then
+if ! unzip "$GAPPS_PATH" "system/*" -x "system/addon.d/*" "system/system_ext/priv-app/SetupWizard/*" -d "$MODPATH"; then
     abort "Unzip MindTheGapps failed, package is corrupted?"
+fi
+DEVICE=$(getprop ro.build.product)
+if [ "$DEVICE" == "tangorpro" ]; then
+  ui_print "Detected tangorpro device. Deleting normal Velvet app"
+  rm -rf "$MODPATH/system/product/priv-app/Velvet"
+else
+  rm -rf "$MODPATH/system/product/priv-app/VelvetTitan"
 fi
 unzip "$ZIPFILE" "system/*" -d "$MODPATH"
 unzip "$ZIPFILE" "module.prop" -d "$MODPATH"
+echo "version=$gapps_version_nice" >> "$MODPATH/module.prop"
+echo "versionCode=$GAPPS_VERSION" >> "$MODPATH/module.prop"
 unzip "$ZIPFILE" "sepolicy.rule" -d "$MODPATH"
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 set_perm_recursive "$MODPATH/system/product/lib" 0 0 0755 0644 "u:object_r:system_lib_file:s0"
