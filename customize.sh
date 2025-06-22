@@ -29,7 +29,8 @@ if [ "$DEVICE" == "tangorpro" ]; then
 else
   rm -rf "$MODPATH/system/product/priv-app/VelvetTitan"
 fi
-if [ $(pm has-feature android.hardware.type.automotive) ]; then
+if pm has-feature android.hardware.type.automotive; then
+  ui_print "Detected automotive device. Deleting Android Auto stub"
   rm -rf "$MODPATH/system/product/priv-app/AndroidAutoStub"
 fi
 unzip "$ZIPFILE" "system/*" -d "$MODPATH"
